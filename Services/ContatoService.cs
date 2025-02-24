@@ -35,14 +35,29 @@ namespace MeuSiteEmMVC.Services
             }
         }
 
-        public async Task<ContatoModel> BuscarContatoPorId(int? id)
+        public async Task<ContatoEdicaoDto> BuscarContatoPorId(int? id)
         {
             try
             {
-                if(id.HasValue)
+                if (id.HasValue)
                 {
-                    var contatoEditar = await _context.Contatos.FirstOrDefaultAsync(x => x.Id == id);
-                    return contatoEditar;
+                    var contato = await _context.Contatos.FirstOrDefaultAsync(x => x.Id == id);
+
+                    if (contato == null)
+                    {
+                        return null;
+                    }
+
+                    // Mapeia ContatoModel para ContatoEdicaoDto
+                    var contatoEdicaoDto = new ContatoEdicaoDto
+                    {
+                        id = contato.Id,
+                        Nome = contato.Nome,
+                        Email = contato.Email,
+                        Telefone = contato.Telefone
+                    };
+
+                    return contatoEdicaoDto;
                 }
                 return null;
             }
@@ -68,6 +83,40 @@ namespace MeuSiteEmMVC.Services
             catch (Exception ex)
             {
                 throw new Exception("Erro ao excluir contato", ex);
+            }
+        }
+
+        public async Task<ContatoModel> EditarContato(ContatoEdicaoDto contato)
+        {
+            if (contato == null)
+            {
+                throw new ArgumentNullException(nameof(contato), "O contato não pode ser nulo.");
+            }
+
+            try
+            {
+                // Busca o contato no banco de dados
+                var contatoModel = await _context.Contatos.FirstOrDefaultAsync(x => x.Id == contato.id);
+
+                if (contatoModel == null)
+                {
+                    throw new Exception("Contato não encontrado.");
+                }
+
+                // Atualiza as propriedades do contato rastreado
+                contatoModel.Nome = contato.Nome;
+                contatoModel.Telefone = contato.Telefone;
+                contatoModel.Email = contato.Email;
+
+                // Salva as alterações no banco de dados
+                _context.Contatos.Update(contatoModel);
+                await _context.SaveChangesAsync();
+
+                return contatoModel;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao editar contato", ex);
             }
         }
     }

@@ -4,6 +4,7 @@ using MeuSiteEmMVC.Models;
 using MeuSiteEmMVC.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace MeuSiteEmMVC.Controllers
 {
@@ -54,11 +55,27 @@ namespace MeuSiteEmMVC.Controllers
         }
         
         [HttpGet]
-        public IActionResult Editar()
+        public async Task<IActionResult> Editar(int? id)
         {
-            return View();
+            var contadoEdit = await _contato.BuscarContatoPorId(id);
+            return View(contadoEdit);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Editar(ContatoEdicaoDto contato)
+        {
+            if (ModelState.IsValid)
+            {
+                var contatoEditar = await _contato.EditarContato(contato);
+                TempData["MensagemSucesso"] = "Contato editado com sucesso!";
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                TempData["MensagemErro"] = "Erro ao editar contato!";
+                return View();
+            }
+        }
         [HttpGet]
         public async Task<IActionResult> ExcluirConfirmacao(int? id)
         {

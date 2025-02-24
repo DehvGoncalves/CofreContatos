@@ -1,5 +1,6 @@
-﻿@using MeuSiteEmMVC.Models
-@model ContatoModel
+﻿@using MeuSiteEmMVC.Dto.Contato
+@model ContatoEdicaoDto
+
 @{
     ViewData["Title"] = "Cadastrar Contato";
 }
@@ -11,6 +12,7 @@
             <h2 class="text-center mb-4">Preencha os Dados</h2>
 
             <form asp-action="Editar" asp-controller="Contato" method="post">
+                <input  type="hidden" asp-for="id" /> <!--Campo para passar o id, invisivel mas serve para pegar Id-->
 
                 <div class="mb-3 text-start">
                     <label class="form-label" asp-for="Nome"></label>

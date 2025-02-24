@@ -6,8 +6,9 @@ namespace MeuSiteEmMVC.Services
     public interface IContatoInterface
     {
         Task<ContatoModel> CriarContato(ContatoCriacaoDto contatoCriacaoDto);
-        Task<ContatoModel> BuscarContatoPorId(int? Id);
+        Task<ContatoEdicaoDto> BuscarContatoPorId(int? id);
         Task<ContatoModel> ExcluirContato(int? id);
+        Task<ContatoModel> EditarContato(ContatoEdicaoDto contato);
     }
 
 }
