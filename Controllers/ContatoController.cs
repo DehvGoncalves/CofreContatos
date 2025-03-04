@@ -81,12 +81,28 @@ namespace MeuSiteEmMVC.Controllers
             TempData["MensagemSucesso"] = "Contato editado com sucesso!";
             return RedirectToAction("Index");
         }
-         
+
         [HttpGet]
         public async Task<IActionResult> ExcluirConfirmacao(int? id)
         {
-            var contato = await _contato.BuscarContatoPorId(id);
-            return View(contato); // Retorna a view com o contato
+            var contatoDto = await _contato.BuscarContatoPorId(id);
+
+            if (contatoDto == null)
+            {
+                TempData["MensagemErro"] = "Contato não encontrado.";
+                return RedirectToAction("Index");
+            }
+
+            // Convertendo ContatoEdicaoDto para ContatoModel
+            var contatoModel = new ContatoModel
+            {
+                Id = contatoDto.id,
+                Nome = contatoDto.Nome,
+                Telefone = contatoDto.Telefone,
+                Email = contatoDto.Email
+            };
+
+            return View(contatoModel); // Passando o ContatoModel para a view
         }
         public async Task<IActionResult> Excluir(int? id)
         {
