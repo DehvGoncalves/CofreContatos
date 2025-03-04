@@ -9,10 +9,12 @@ namespace MeuSiteEmMVC.Dto.Contato
         [Required(ErrorMessage = "O nome é obrigatório")]
         public string Nome { get; set; }
 
-        [Required(ErrorMessage = "O telefone é obrigatório")]
+        [Required(ErrorMessage = "O campo telefone é obrigatório")]
+        [RegularExpression(@"^\(?\d{2}\)?[\s-]?\d{4,5}-?\d{4}$", ErrorMessage = "Digite um telefone válido no formato (XX) XXXXX-XXXX ou (XX) XXXX-XXXX")]
         public string Telefone { get; set; }
 
-        [Required(ErrorMessage = "O email é obrigatório")]
+        [Required(ErrorMessage = "O campo email é obrigatório")]
+        [EmailAddress(ErrorMessage = "Digite um email válido")]
         public string Email { get; set; }
     }
 }

@@ -30,30 +30,32 @@ namespace MeuSiteEmMVC.Controllers
             return View();
         }
 
+
         [HttpPost]
-        public IActionResult Criar(string nome, string email, string telefone)
+        public async Task<IActionResult> Criar(ContatoModel contato)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var contato = new ContatoModel
-                {
-                    Nome = nome,
-                    Email = email,
-                    Telefone = telefone
-                };
-                _context.Contatos.Add(contato);
-                _context.SaveChanges();
-                TempData["MensagemSucesso"] = "Contato criado com sucesso!";
-                return RedirectToAction("Index");
+                TempData["MensagemErro"] = "Erro ao criar contato!";
+                return View(contato);
             }
             else
             {
-                TempData["MensagemErro"] = "Erro ao criar contato!";
-                return View();
-            }
+                var contatoCriacaoDto = new ContatoCriacaoDto
+                {
+                    Nome = contato.Nome,
+                    Telefone = contato.Telefone,
+                    Email = contato.Email
+                };
 
+                await _contato.CriarContato(contatoCriacaoDto);
+                TempData["MensagemSucesso"] = "Contato criado com sucesso!";
+                return RedirectToAction("Index");
+            }
         }
-        
+
+
+
         [HttpGet]
         public async Task<IActionResult> Editar(int? id)
         {
@@ -64,18 +66,22 @@ namespace MeuSiteEmMVC.Controllers
         [HttpPost]
         public async Task<IActionResult> Editar(ContatoEdicaoDto contato)
         {
-            if (ModelState.IsValid)
-            {
-                var contatoEditar = await _contato.EditarContato(contato);
-                TempData["MensagemSucesso"] = "Contato editado com sucesso!";
-                return RedirectToAction("Index");
-            }
-            else
+            // Limpa qualquer mensagem anterior para evitar sobreposição
+            TempData.Remove("MensagemSucesso");
+            TempData.Remove("MensagemErro");
+
+            if (!ModelState.IsValid)
             {
                 TempData["MensagemErro"] = "Erro ao editar contato!";
-                return View();
+                return View(contato);
             }
+
+            // Caso a validação passe
+            var contatoEditar = await _contato.EditarContato(contato);
+            TempData["MensagemSucesso"] = "Contato editado com sucesso!";
+            return RedirectToAction("Index");
         }
+         
         [HttpGet]
         public async Task<IActionResult> ExcluirConfirmacao(int? id)
         {

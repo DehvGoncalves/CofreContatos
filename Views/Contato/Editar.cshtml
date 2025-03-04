@@ -17,16 +17,22 @@
                 <div class="mb-3 text-start">
                     <label class="form-label" asp-for="Nome"></label>
                     <input type="text" class="form-control shadow-none" asp-for="Nome" placeholder="Digite o nome" />
+                    <span asp-validation-for="Nome" class="text-danger"></span> <!-- Mensagem de validação -->
+
                 </div>
 
                 <div class="mb-3 text-start">
                     <label class="form-label" asp-for="Email"></label>
                     <input type="email" class="form-control shadow-none" asp-for="Email" placeholder="Digite o email" />
+                    <span asp-validation-for="Email" class="text-danger"></span> <!-- Mensagem de validação -->
+
                 </div>
 
                 <div class="mb-3 text-start">
                     <label class="form-label" asp-for="Telefone"></label>
                     <input type="tel" class="form-control shadow-none" asp-for="Telefone" placeholder="Digite o telefone" />
+                    <span asp-validation-for="Telefone" class="text-danger"></span> <!-- Mensagem de validação -->
+
                 </div>
 
                 <div class="d-grid">

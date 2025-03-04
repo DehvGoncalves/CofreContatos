@@ -14,7 +14,7 @@ namespace MeuSiteEmMVC.Services
         {
             _context = context;
         }
-        public Task<ContatoModel> CriarContato(ContatoCriacaoDto contatoCriacaoDto)
+        public async Task<ContatoModel> CriarContato(ContatoCriacaoDto contatoCriacaoDto)
         {
             try
             {
@@ -26,14 +26,16 @@ namespace MeuSiteEmMVC.Services
                 };
 
                 _context.Add(contato);
-                _context.SaveChanges();
-                return Task.FromResult(contato);
+                await _context.SaveChangesAsync();
+                return contato;
             }
             catch (Exception ex)
             {
                 throw new Exception("Erro ao criar contato", ex);
             }
         }
+
+
 
         public async Task<ContatoEdicaoDto> BuscarContatoPorId(int? id)
         {

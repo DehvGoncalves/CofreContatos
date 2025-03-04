@@ -5,28 +5,43 @@
 }
 
 <div class="text-center">
-
     <div class="d-grid gap-2 d-md-flex justify-content-md-start">
         <div class="card-body p-4">
             <h2 class="text-center mb-4">Preencha os Dados</h2>
 
-            <form asp-action="Criar" asp-controller="Contato" method="post">
+            <!-- Exibir mensagens de sucesso/erro do TempData -->
+            @if (TempData["MensagemSucesso"] != null)
+            {
+                <div class="alert alert-success">@TempData["MensagemSucesso"]</div>
+            }
+            @if (TempData["MensagemErro"] != null)
+            {
+                <div class="alert alert-danger">@TempData["MensagemErro"]</div>
+            }
 
+            <form asp-action="Criar" asp-controller="Contato" method="post">
+                <!-- Campo Nome -->
                 <div class="mb-3 text-start">
                     <label class="form-label" asp-for="Nome"></label>
                     <input type="text" class="form-control shadow-none" asp-for="Nome" placeholder="Digite o nome" />
+                    <span asp-validation-for="Nome" class="text-danger"></span> <!-- Mensagem de validação -->
                 </div>
 
+                <!-- Campo Email -->
                 <div class="mb-3 text-start">
                     <label class="form-label" asp-for="Email"></label>
                     <input type="email" class="form-control shadow-none" asp-for="Email" placeholder="Digite o email" />
+                    <span asp-validation-for="Email" class="text-danger"></span> <!-- Mensagem de validação -->
                 </div>
 
+                <!-- Campo Telefone -->
                 <div class="mb-3 text-start">
                     <label class="form-label" asp-for="Telefone"></label>
                     <input type="tel" class="form-control shadow-none" asp-for="Telefone" placeholder="Digite o telefone" />
+                    <span asp-validation-for="Telefone" class="text-danger"></span> <!-- Mensagem de validação -->
                 </div>
 
+                <!-- Botão de envio -->
                 <div class="d-grid">
                     <button type="submit" class="btn btn-success btn-lg">Salvar</button>
                 </div>
@@ -37,5 +52,9 @@
             </p>
         </div>
     </div>
-
 </div>
+
+<!-- Incluir scripts de validação do lado do cliente -->
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
