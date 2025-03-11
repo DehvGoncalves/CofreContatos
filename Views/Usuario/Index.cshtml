@@ -1,0 +1,83 @@
+﻿@using MeuSiteEmMVC.Models
+@model List<UsuarioModel>
+@{
+    ViewData["Title"] = "Listagem de Usuários";
+}
+
+@if (TempData["MensagemSucesso"] != null)
+{
+    <div class="alert alert-success text-dark" role="alert">
+        @TempData["MensagemSucesso"]
+    </div>
+}
+
+@if (TempData["MensagemErro"] != null)
+{
+    <div class="alert alert-danger text-dark" role="alert">
+        @TempData["MensagemErro"]
+    </div>
+}
+
+<div class="text-center">
+    <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+        <a asp-controller="Usuario" asp-action="Criar" class="btn btn-primary">
+            Adicionar Novo Usuário +
+        </a>
+    </div>
+    <br />
+
+    <h1>Listagem de Usuários</h1>
+
+    @* Criando a tabela *@
+    <table class="table" id="tabela-usuarios">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nome</th>
+                <th scope="col">Login</th>
+                <th scope="col">Email</th>
+                <th scope="col">Data de Cadastro</th>
+                <th scope="col">Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                @foreach (var usuario in Model)
+                {
+                    <tr>
+                        <td>@usuario.Id</td>
+                        <td>@usuario.Nome</td>
+                        <td>@usuario.Login</td>
+                        <td>@usuario.Email</td>
+                        <td>@usuario.DataCadastro</td>
+
+                        <td>
+                            <div class="btn-group" role="group" aria-label="Ações">
+                                @* Botão de editar *@
+                                <a asp-action="Editar" asp-controller="Usuario"
+                                   asp-route-id="@usuario.Id"
+                                   class="btn btn-warning">
+                                    Editar
+                                </a>
+
+                                @* Botão de excluir *@
+                                <a asp-action="ExcluirConfirmacao" asp-controller="Usuario"
+                                   asp-route-id="@usuario.Id"
+                                   class="btn btn-danger">
+                                    Excluir
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="6" class="text-center">Nenhum usuário encontrado</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <Content Remove="Dto\Contato\ContatoEdicaoDto.cshtml" />
+    <Content Remove="Enums\Index.cshtml" />
     <Content Remove="Services\ContatoService.cshtml" />
   </ItemGroup>
 
